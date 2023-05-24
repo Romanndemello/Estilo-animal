@@ -22,6 +22,9 @@ const routes = [
       { path: '/admin/clientDetail',
         component: () => import('pages/admin/ClientDetail.vue')
       },
+      { path: '/admin/newClient',
+        component: () => import('pages/admin/NewClient.vue')
+      },
     ]
   },
   {

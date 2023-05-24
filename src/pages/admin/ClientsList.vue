@@ -5,13 +5,13 @@
         class="bg-accent"
         title="Lista de usuários"
         :columns="columnsData"
-        :rows="usersList"
+        :rows="clientsList"
         row-key="_id"
         rows-per-page-label="Registros por página"
         no-data-label="Procure por um usuário para visualizar relacionados"
         no-results-label="A pesquisa não retornou nenhum resultado"
         :rows-per-page-options="[10, 20, 30, 50]"
-        @row-click="clkOpenUserDetail"
+        @row-click="clkOpenClientDetail"
         selection="multiple"
         v-model:selected="selected"
         :selected-rows-label="getSelectedString"
@@ -45,7 +45,7 @@
           <q-td :props="props">
             <q-icon v-if="props.row.status" :name="props.row.status.icon" :color="props.row.status.color" size='30px' left>
               <q-tooltip :props="props" :offset="[0,3]">
-                {{props.row.status.label}}
+                <!-- {{props.row.status.label}} -->
               </q-tooltip>
             </q-icon>
           </q-td>
@@ -60,10 +60,10 @@
   const {formatDate} = date
   
   export default defineComponent({
-    name: 'UsersList',
+    name: 'ClientsList',
     props: {
-      drawer: Boolean,
-      permissions: Array,
+      // drawer: Boolean,
+      // permissions: Array,
     },
     data() {
       return {
@@ -73,10 +73,21 @@
         popupFlag: false,
         newFlagInput: '',
         options: [],
-        columnsData: useTableColumns().users,
+        columnsData: ['id', 'nome', 'apelido', 'raca', 'sexo', 'tamanho', 'pessoa', 'telefone'],
         selected: [],
         filter: '',
-        usersList: [],
+        clientsList: [
+          {
+            id: 1,
+            nome: 'João',
+            apelido: 'Joaquim',
+            raca: 'Austrália',
+            sexo: 'Masculino',
+            tamanho: 'M',
+            pessoa: 'Fulano',
+            telefone: '1234567890',
+          }
+        ],
         statusFilter: null,
         pagination: {
           page: 1,
@@ -87,7 +98,7 @@
       }
     },
     mounted() {
-      this.$q.loading.hide()
+      // this.$q.loading.hide()
     },
     beforeMount() {
     //   this.getUsersList()
@@ -114,11 +125,11 @@
     //       this.usersList = r.data
     //     })
     //   },
-    //   getSelectedString () {
-    //     return this.selected.length === 0 ? '' : `${this.selected.length}
-    //     despesa${this.selected.length > 1 ? 's' : ''}
-    //     selecionadas de ${this.expensesData.length}`
-    //   },
+      getSelectedString () {
+        return this.selected.length === 0 ? '' : `${this.selected.length}
+        despesa${this.selected.length > 1 ? 's' : ''}
+        selecionadas de ${this.expensesData.length}`
+      },
     //   nextPage (e) {
     //     this.pagination.page = e.pagination.page
     //     this.pagination.sortBy = e.pagination.sortBy
@@ -126,10 +137,10 @@
     //     this.findSalesByFilter()
     //     console.log(e.pagination)
     //   },
-    //   clkOpenUserDetail(e, r, i) {
-    //     console.log(r, 'aqui user id')
-    //     this.$router.push('/admin/userDetail?_userId=' + r.userId)
-    //   },
+      clkOpenClientDetail(e, r, i) {
+        console.log(r, 'aqui user id')
+        this.$router.push('/admin/clientDetail?_userId=' + r.userId)
+      },
     },
     // watch: {
     //   drawer: function (nV, oV) {

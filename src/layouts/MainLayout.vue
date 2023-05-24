@@ -127,16 +127,16 @@
                   active-class="bg-blue-grey-2 text-primary"
                   @click="clkOptionMenu(item)"
                 >
-                  <q-item-section v-if="active === item.label" avatar>
+                  <!-- <q-item-section v-if="active === item.label" avatar>
                     <q-icon
                       :name="item.icon"
                       color="primary"
                       />
-                  </q-item-section>
-                  <q-item-section v-else avatar>
+                  </q-item-section> -->
+                  <q-item-section avatar>
                     <q-icon
                       :name="item.icon"
-                      color="secondary"
+                      color="primary"
                     />
                   </q-item-section>
                   <q-item-section>
@@ -213,7 +213,7 @@ export default defineComponent({
         {
           route: '/admin/clientsList',
           label: 'Lista de clientes',
-          icon: 'patient_list'
+          icon: 'list'
         },
         {
           route: '/admin/newClient',
@@ -287,37 +287,26 @@ export default defineComponent({
     //   await this.$logoAndColors.getFromServer(this.userInfo.cId)
     //   return
     // },
-    // clkOptionMenu (item) {
-    //   this.$router.push(item.route)
-    //   this.active = item.label
-    // },
+    clkOptionMenu (item) {
+      this.$router.push(item.route)
+      this.active = item.label
+    },
     clkDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
-    // clkItem (item, i) {
-    //   this.indexMenu1 = i
-    //   this.activeRightDrawer = item.id
-    //   this.$router.push('/' + item.role.toLowerCase())
-    //   this.options = this.$getDrawerOptions(item.role.toLowerCase())
-    // },
-    // clkMenu (menuItem, i) {
-    //   this.activeMenu = i
-    //   this.$router.push(menuItem.route)
-    // },
-    // makeSearch () {
-    //   this.$router.push('/expenses/searchResults?filterValue='+ this.filterValue)
-    // },
-    // getStatusNotifications() {
-    //   const opt = {
-    //     route: '/expenses/getStatusNotifications',
-    //     body: {
-    //       home: true
-    //     }
-    //   }
-    //   this.$fetch(opt).then(r => {
-    //     this.statusNotificationsList = r.data
-    //   })
-    // },
+    clkItem (item, i) {
+      this.indexMenu1 = i
+      this.activeRightDrawer = item.id
+      this.$router.push('/' + item.role.toLowerCase())
+      this.options = this.$getDrawerOptions(item.role.toLowerCase())
+    },
+    clkMenu (menuItem, i) {
+      this.activeMenu = i
+      this.$router.push(menuItem.route)
+    },
+    makeSearch () {
+      this.$router.push('/expenses/searchResults?filterValue='+ this.filterValue)
+    },
     // clkOpenExpenseDetail(notification) {
     //   const opt = {
     //     method: 'POST',
