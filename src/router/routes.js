@@ -10,20 +10,34 @@ const routes = [
       },
 
       //adm
-      { path: '/admin',
-        component: () => import('pages/admin/Home.vue')
+      { path: '/adm',
+        component: () => import('pages/adm/ClientsList.vue')
       },
-      { path: '/admin/home',
-        component: () => import('pages/admin/Home.vue')
+      { path: '/adm/clientsList',
+        component: () => import('pages/adm/ClientsList.vue')
       },
-      { path: '/admin/clientsList',
-        component: () => import('pages/admin/ClientsList.vue')
+      { path: '/adm/clientDetail',
+        component: () => import('pages/adm/ClientDetail.vue')
       },
-      { path: '/admin/clientDetail',
-        component: () => import('pages/admin/ClientDetail.vue')
+      { path: '/adm/newClient',
+        component: () => import('pages/adm/NewClient.vue')
       },
-      { path: '/admin/newClient',
-        component: () => import('pages/admin/NewClient.vue')
+      //finance
+      { path: '/finance',
+        component: () => import('pages/finance/SuppliersList.vue')
+      },
+      { path: '/finance/newSupplier',
+        component: () => import('pages/finance/NewSupplier.vue')
+      },
+      { path: '/finance/suppliersList',
+        component: () => import('pages/finance/SuppliersList.vue')
+      },
+      // reports
+      { path: '/reports',
+        component: () => import('pages/reports/ReportsList.vue')
+      },
+      { path: '/reports/reportsList',
+        component: () => import('pages/reports/ReportsList.vue')
       },
     ]
   },

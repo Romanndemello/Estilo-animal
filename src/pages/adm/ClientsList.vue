@@ -2,8 +2,7 @@
     <q-page>
       <q-table
         flat
-        class="bg-accent"
-        title="Lista de usuários"
+        title="Lista de clientes"
         :columns="columnsData"
         :rows="clientsList"
         row-key="_id"
@@ -12,15 +11,13 @@
         no-results-label="A pesquisa não retornou nenhum resultado"
         :rows-per-page-options="[10, 20, 30, 50]"
         @row-click="clkOpenClientDetail"
-        selection="multiple"
         v-model:selected="selected"
-        :selected-rows-label="getSelectedString"
-        :filter="filter"
+        :filter="filterValue"
         v-model:pagination="pagination"
         @request="nextPage"
       >
         <template v-slot:top-right>
-          <q-input outlined dense debounce="300" v-model="filter" placeholder="Procurar">
+          <q-input outlined dense debounce="300" v-model="filterValue" placeholder="Procurar">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -53,17 +50,17 @@
       </q-table>
     </q-page>
   </template>
+
   <script>
   import { defineComponent } from 'vue'
-//   import { useTableColumns } from 'stores/tableColumns'
+  import { useTableColumns } from 'stores/tableColumns'
   import { date } from 'quasar'
   const {formatDate} = date
-  
   export default defineComponent({
     name: 'ClientsList',
     props: {
-      // drawer: Boolean,
-      // permissions: Array,
+      drawer: Boolean,
+      permissions: Array,
     },
     data() {
       return {
@@ -73,80 +70,71 @@
         popupFlag: false,
         newFlagInput: '',
         options: [],
-        columnsData: ['id', 'nome', 'apelido', 'raca', 'sexo', 'tamanho', 'pessoa', 'telefone'],
+        columnsData: useTableColumns().clientsList,
         selected: [],
-        filter: '',
-        clientsList: [
-          {
-            id: 1,
-            nome: 'João',
-            apelido: 'Joaquim',
-            raca: 'Austrália',
-            sexo: 'Masculino',
-            tamanho: 'M',
-            pessoa: 'Fulano',
-            telefone: '1234567890',
-          }
-        ],
+        filterValue: '',
+        clientsList: [],
         statusFilter: null,
         pagination: {
+          sortBy: '_id',
+          descending: true,
           page: 1,
           rowsPerPage: 10,
           rowsNumber: 0,
-          sortBy: ''
         }
       }
     },
     mounted() {
-      // this.$q.loading.hide()
+      this.$q.loading.hide()
     },
     beforeMount() {
-    //   this.getUsersList()
+      this.getClientsList()
     },
     methods: {
-    //   clkFilterByStatus (item) {
-    //     if (!this.statusFilter) this.statusFilter = item.status
-    //     else if (this.statusFilter === item.status) this.statusFilter = null
-    //     else this.statusFilter = item.status
-    //     this.findSalesByFilter()
-    //   },
-    //   getUsersList () {
-    //     const opt = {
-    //       route: '/auth/getAllUsersFromCompany',
-    //       body: {
-    //         searchString: this.filter,
-    //         page: this.pagination.page,
-    //         rowsPerPage: this.pagination.rowsPerPage,
-    //         sortBy: this.pagination.sortBy,
-    //         descending: this.pagination.descending,
-    //       }
-    //     }
-    //     this.$fetch(opt).then(r => {
-    //       this.usersList = r.data
-    //     })
-    //   },
+      clkFilterByStatus (item) {
+        if (!this.statusFilter) this.statusFilter = item.status
+        else if (this.statusFilter === item.status) this.statusFilter = null
+        else this.statusFilter = item.status
+        this.findSalesByFilter()
+      },
+      getClientsList () {
+        const opt = {
+          route: '/desktop/adm/getListOfClients',
+          body: {
+            filterValue: this.filterValue,
+            page: this.pagination.page,
+            rowsPerPage: this.pagination.rowsPerPage,
+            sortBy: this.pagination.sortBy,
+            descending: this.pagination.descending
+          }
+        }
+        this.$fetch(opt).then(r => {
+          this.clientsList = r.data.list
+          this.pagination.rowsNumber  = r.data.count
+        })
+      },
       getSelectedString () {
         return this.selected.length === 0 ? '' : `${this.selected.length}
         despesa${this.selected.length > 1 ? 's' : ''}
         selecionadas de ${this.expensesData.length}`
       },
-    //   nextPage (e) {
-    //     this.pagination.page = e.pagination.page
-    //     this.pagination.sortBy = e.pagination.sortBy
-    //     this.pagination.descending = e.pagination.descending
-    //     this.findSalesByFilter()
-    //     console.log(e.pagination)
-    //   },
+      nextPage (e) {
+        this.pagination.page = e.pagination.page
+        this.pagination.sortBy = e.pagination.sortBy
+        this.pagination.descending = e.pagination.descending
+        this.getClientsList()
+        console.log(e.pagination)
+      },
       clkOpenClientDetail(e, r, i) {
         console.log(r, 'aqui user id')
-        this.$router.push('/admin/clientDetail?_userId=' + r.userId)
+        this.$router.push('/adm/clientDetail?_userId=' + r.userId)
       },
     },
-    // watch: {
-    //   drawer: function (nV, oV) {
-    //     this.drawerData = nV
-    //   }
-    // }
+    watch: {
+      drawer: function (nV, oV) {
+        this.drawerData = nV
+      }
+    }
   })
   </script>
   
