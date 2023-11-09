@@ -3,7 +3,7 @@
     <div class="fixed-center font-montserrat" style="min-width: 500px">
       <div class="text-center">
         <!-- <q-img
-          src="../assets/logoPdt2.png"
+          src="../assets/logo.png"
           fit="fill"
           class="q-ma-xl"
           align="center"
@@ -26,22 +26,18 @@
           style=""
         >
           <q-carousel-slide name="login" class="no-wrap flex-center">
-            <div class="q-gutter-lg q-mt-none">
+            <div class="q-gutter-md q-mt-none">
               <InputEmail
+                class="full-width q-mb-sm"
                 label="Login"
-                fieldHint="email@email.com"
-                idField="user"
+                field-hint="email@email.com"
+                id-field="user"
                 @onChange="inputChange"
-                :valueField="formData.user"
+                :value-field="formData.user"
                 @onEnter="clkNext"
               ></InputEmail>
-              <!-- <q-btn
-                color="primary"
-                label="Criar login"
-                flat
-                @click="clkCreateLogin"
-              /> -->
               <q-btn
+                class="full-width"
                 color="primary"
                 label="Próximo"
                 @click="clkNext"
@@ -49,6 +45,20 @@
                 unelevated
                 no-caps
               />
+              <!-- <div class="flex flex-center full-width q-mt-md">
+              <div class="divider" />
+                <span class="q-mx-md">Ou</span>
+                <div class="divider" />
+              </div>
+              <q-btn
+                class="full-width"
+                color="primary"
+                label="Criar uma conta"
+                @click="clkCreateLogin"
+                :loading="btnNextLoading"
+                no-caps
+                outline
+              /> -->
             </div>
           </q-carousel-slide>
           <q-carousel-slide name="password" class="no-wrap flex-center">
@@ -72,13 +82,6 @@
                 unelevated
                 no-caps
               />
-              <!-- <q-btn
-                color="secondary"
-                label="Esqueci minha senha"
-                flat
-                @click="clkForgotPassword"
-                class="align-right"
-              /> -->
             </div>
           </q-carousel-slide>
           <q-carousel-slide name="newPassword" class="no-wrap flex-center">
@@ -122,10 +125,10 @@
               </div>
               <InputEmail
                 label="Digite seu email"
-                fieldHint="email@email.com"
-                idField="forgotPasswordUser"
+                field-hint="email@email.com"
+                id-field="forgotPasswordUser"
                 @onChange="inputChange"
-                :valueField="formData.forgotPasswordUser"
+                :value-field="formData.forgotPasswordUser"
                 @keyup.enter="btnCheckEmail"
                 autofocus
               ></InputEmail>
@@ -161,6 +164,8 @@
 <script>
 import InputEmail from "../components/InputEmail.vue";
 import  CryptoJS from "crypto-js"
+import useFetch from "../boot/useFetch";
+import utils from '../boot/utils'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -183,25 +188,32 @@ export default defineComponent({
         pass1: "",
         pass2: "",
         checkEqual: true
-      }
+      },
+      imageUrl: null
     };
   },
   components: {
     InputEmail
   },
   beforeMount() {
-    this.$q.localStorage.clear()
+    // this.$logoAndColors.reset()
+    // this.$q.localStorage.clear()
+    // if (this.$route.query.cId) {
+    //   this.imageUrl = this.$attachmentsAddress() + 'logo_cid_' + this.$route.query.cId + '.png'
+    //   this.getCompanyColors()
+    // }
   },
-  created() {},
+
   methods: {
+    // async getCompanyColors () {
+    //   await this.$logoAndColors.getFromServer(this.$route.query.cId)
+    // },
     registerNewPassword() {
       if (this.newPassword.pass1 !== this.newPassword.pass2) {
         this.$q.notify("As senhas não conferem. Verifique e tente novamente.");
         return;
       }
       const opt = {
-        project: 'omnisystem',
-        serverName: 'authentication',
         route: '/np',
         body: {
           user: this.formData.user,
@@ -215,7 +227,7 @@ export default defineComponent({
           ).toString()
         }
       }
-      this.$fetch(opt).then(r => {
+      useFetch(opt).then(r => {
         if (r.error) {
           this.$q.notify(this.errorMessages(r.errorType));
           return;
@@ -252,14 +264,12 @@ export default defineComponent({
       //   }
       // }
       const opt = {
-        project: 'omnisystem',
-        serverName: 'authentication',
         route: '/checkEmailExists',
         body: {
           email: this.formData.forgotPasswordUser
         }
       }
-      this.$fetch(opt).then(r => {
+      useFetch(opt).then(r => {
         this.btnNextLoading = false;
         if (r.error) {
           this.$q.notify(this.errorMessages(r.errorType));
@@ -292,17 +302,15 @@ export default defineComponent({
       }
       this.btnNextLoading = true;
       const opt = {
-        project: 'omnisystem',
-        serverName: 'authentication',
-        route: '/getKey',
+        route: '/desktop/auth/getKey',
         body: {
           login: this.formData.user
         }
       }
-      this.$fetch(opt).then(r => {
+      useFetch(opt).then(r => {
         this.btnNextLoading = false;
         if (r.error) {
-          this.$q.notify(this.errorMessages(r.errorType));
+          this.$q.notify(r.errorMessage);
           if (r.errorType === "keyNonExistent") this.loginStep = "login";
           return;
         }
@@ -324,7 +332,7 @@ export default defineComponent({
       this.loginStep = "login";
     },
     clkCreateLogin() {
-      this.$router.push("/createlogin");
+      this.$router.push("/usercreatelogin");
     },
     async clkEnter () {
       if (this.formData.user === "" || this.formData.password === "") {
@@ -333,9 +341,7 @@ export default defineComponent({
       }
       this.btnEnterLoading = true;
       const opt = {
-        project: 'omnisystem',
-        serverName: 'authentication',
-        route: '/makeLogin',
+        route: '/desktop/auth/makeLogin',
         body: {
           user: this.formData.user,
           token: CryptoJS.AES.encrypt(
@@ -344,22 +350,29 @@ export default defineComponent({
             ).toString()
         }
       }
-      this.$fetch(opt).then(async r => {
+      useFetch(opt).then(async r => {
         if (r.error) {
           this.btnEnterLoading = false;
           if (r.errorType === "passwordNonExistent") this.loginStep = "login";
-          if (r.errorType === "wrongUserPassword") this.$q.notify(this.errorMessages(r.errorType))
+          if (r.errorType === "wrongUserPassword") this.$q.notify('Usuário ou senha incorretos')
           return;
         }
-        // comentado
-        await this.$registerUserDataAndKey({
+        await utils.registerUserDataAndKey({
           data: r.data,
           key: this.key
         })
+        // await this.$logoAndColors.getFromServer(this.$route.query.cId)
         this.btnEnterLoading = false;
         this.$router.push("/");
       });
     },
   }
-}) 
+})
 </script>
+<style>
+.divider{
+  flex-grow: 1;
+  height: 1px;
+  background-color: #ccc;
+}
+</style>

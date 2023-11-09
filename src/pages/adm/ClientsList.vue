@@ -126,8 +126,7 @@
         console.log(e.pagination)
       },
       clkOpenClientDetail(e, r, i) {
-        console.log(r, 'aqui user id')
-        this.$router.push('/adm/clientDetail?_userId=' + r.userId)
+        this.$router.push('/adm/clientDetail?clientId=' + r._id)
       },
     },
     watch: {
