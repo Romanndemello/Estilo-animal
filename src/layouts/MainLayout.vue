@@ -3,7 +3,7 @@
     <div class="">
       <div class="col-11">
         <q-header>
-          <q-toolbar class="bg-grey-3 text-primary" id="idMainToolbar">
+          <q-toolbar class="bg-grey-3 text-secondary" id="idMainToolbar">
             <q-btn
               flat
               dense
@@ -12,8 +12,8 @@
               aria-label="Menu"
               @click="clkDrawer"
             />
-            <q-toolbar-title class="text-primary">
-              Escolas App
+            <q-toolbar-title class="text-secondary">
+              Estilo Animal
             </q-toolbar-title>
             <q-input
               dense
@@ -296,10 +296,10 @@ export default defineComponent({
       this.permissions[0].id ? this.activeRightDrawer = this.permissions[0].id  : this.activeRightDrawer = 0
       if (
         this.$route.path === "/" ||
-        this.$route.path === "/plans" ||
-        this.$route.path === "/plans/home"
+        this.$route.path === "/adm" ||
+        this.$route.path === "/adm/clientsList"
       ) {
-        this.options = utils.getDrawerOptions("plans");
+        this.options = utils.getDrawerOptions("adm");
         this.active = this.options[0].label;
       } else {
         this.options = utils.getDrawerOptions(this.$route.path.split("/")[1]);
@@ -362,7 +362,7 @@ export default defineComponent({
 <style scoped>
 .gradient {
   transition: opacity 0.5s;
-  background-image: linear-gradient(to bottom, #2c3393, #2675c3, #04acf3);
+  background-image: linear-gradient(180deg, rgba(124,81,161,1) 0%, rgba(126,85,162,1) 64%, rgba(255,203,4,1) 100%);
 
   background-size: 100%;
   background-repeat: repeat;

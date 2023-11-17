@@ -3,7 +3,11 @@
       <q-page v-if="clientData">
         <div class="row q-pa-md q-ml-sm ">
           <div class="col-4 text-h5">
-            {{ clientData.petName}} | {{clientData.clientName}}
+            {{ clientData.petName}} 
+            <q-chip 
+              outline 
+              color="secondary"
+            >Dono: {{clientData.clientName}}</q-chip>
           </div>
           <div class="col" align="end">
             <div class="row justify-end items-center">
@@ -24,8 +28,7 @@
                 <q-icon class="q-ml-sm" name="chat" color="green-8"/>
               </q-btn> -->
               <div>
-                Status:
-                <q-badge class="text-subtitle2" rounded>
+                <q-badge color="secondary" class="text-subtitle2" rounded>
                   {{ clientData.petBreed }}
                 </q-badge>
               </div>
@@ -57,44 +60,61 @@
             <div class="row justify-center ">
               <div class="col-10 q-gutter-md">
                 <q-input
-                  readonly
+                  v-model="clientData.petName"
                   outlined
                   label="Nome do pet"
-                  v-model="clientData.petName"
                 />
                 <q-input
-                  readonly
+                  v-model="clientData.petBreed"
                   outlined
                   label="Raça"
-                  v-model="clientData.petBreed"
                 />
-                <q-input
-                  readonly
-                  outlined
-                  label="Gênero"
+                <q-select
                   v-model="clientData.petGender"
+                  outlined
+                  :options="genderOptions"
+                  emit-value
+                  map-options
+                  label="Gênero"
                 />
                 <q-input
-                  readonly
+                  v-model="clientData.petDate"
                   outlined
                   label="Data de nascimento"
-                  v-model="clientData.petDate"
                 />
               </div>
             </div>
           </q-tab-panel>
-          <q-tab-panel name="selectedProcedures" class="q-pa-none ">
-            <q-list
-              separator
-  
-              class="bg-accent q-pa-sm"
-            >
-            </q-list>
-            <q-separator/>
-  
-  
+          <q-tab-panel name="client" class="q-pa-none ">
+            <div class="row justify-center ">
+              <div class="col-10 q-gutter-md">
+                <q-input
+                  v-model="clientData.clientName"
+                  outlined
+                  label="Nome do cliente"
+                />
+                <!-- <q-input
+                  v-model="clientData.petBreed"
+                  outlined
+                  label="Raça"
+                />
+                <q-select
+                  v-model="clientData.petGender"
+                  outlined
+                  :options="genderOptions"
+                  emit-value
+                  map-options
+                  label="Gênero"
+                />
+                <q-input
+                  v-model="clientData.petDate"
+                  outlined
+                  label="Data de nascimento"
+                /> -->
+              </div>
+            </div>
           </q-tab-panel>
-          <q-tab-panel name="images" class="q-pa-none">
+          <q-tab-panel name="more" class="q-pa-none">
               
           </q-tab-panel>
         </q-tab-panels>
@@ -184,12 +204,17 @@
   </template>
   <script>
   import { defineComponent } from 'vue'
+  import useFetch from 'src/boot/useFetch'
   export default defineComponent({
     name: 'clientDetail',
     data() {
       return {
         tab: 'pet',
-        clientData: {}
+        clientData: {},
+        genderOptions: [
+          {label: 'Macho', value: 'M'},
+          {label: 'Fêmea', value: 'F'}
+        ]
       }
     },
     mounted() {
@@ -207,7 +232,7 @@
           }
         }
         this.$q.loading.show()
-        this.$fetch(opt).then(r => {
+        useFetch(opt).then(r => {
           this.$q.loading.hide()
           this.clientData = r.data
           if(this.clientData.petGender === 'F') {

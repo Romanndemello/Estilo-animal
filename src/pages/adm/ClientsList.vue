@@ -55,6 +55,7 @@
   import { defineComponent } from 'vue'
   import { useTableColumns } from 'stores/tableColumns'
   import { date } from 'quasar'
+  import useFetch from 'src/boot/useFetch'
   const {formatDate} = date
   export default defineComponent({
     name: 'ClientsList',
@@ -108,9 +109,12 @@
             descending: this.pagination.descending
           }
         }
-        this.$fetch(opt).then(r => {
+        this.$q.loading.show()
+        useFetch(opt).then(r => {
+          this.$q.loading.hide()
           this.clientsList = r.data.list
-          this.pagination.rowsNumber  = r.data.count
+          this.formatDate()
+          this.pagination.rowsNumber = r.data.count[0].count;
         })
       },
       getSelectedString () {
@@ -128,7 +132,18 @@
       clkOpenClientDetail(e, r, i) {
         this.$router.push('/adm/clientDetail?clientId=' + r._id)
       },
+      formatDate () {
+        for(let i = 0; this.clientsList.length > i; i++) {
+          if(this.clientsList[i].petDate) {
+            const data = date.extractDate(this.clientsList[i].petDate, 'YYYY-MM-DD HH:mm:ss')
+            this.clientsList[i].petDate = date.formatDate(data, 'DD/MM/YYYY')
+            // const dateFinal = date.addToDate(data, {years: 4})
+            // this.reportData.orgList.cargos[i].affiliateInfo.dataFinalFormated = date.formatDate(dateFinal, 'DD/MM/YYYY')
+          }
+        }
+      },
     },
+    
     watch: {
       drawer: function (nV, oV) {
         this.drawerData = nV

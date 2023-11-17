@@ -2,13 +2,13 @@
   <q-layout class="app-font">
     <div class="fixed-center font-montserrat" style="min-width: 500px">
       <div class="text-center">
-        <!-- <q-img
-          src="../assets/logo.png"
+        <q-img
+          src="../assets/eanimalLogo.png"
           fit="fill"
           class="q-ma-xl"
           align="center"
           width="50%"
-        /> -->
+        />
       </div>
       <div class="">
         <q-carousel
@@ -38,7 +38,7 @@
               ></InputEmail>
               <q-btn
                 class="full-width"
-                color="primary"
+                color="secondary"
                 label="Próximo"
                 @click="clkNext"
                 :loading="btnNextLoading"
@@ -73,9 +73,9 @@
                 @keyup.enter="clkEnter"
                 autofocus
               />
-              <q-btn color="primary" label="Voltar" flat @click="clkBack" unelevated no-caps/>
+              <q-btn color="secondary" label="Voltar" flat @click="clkBack" unelevated no-caps/>
               <q-btn
-                color="primary"
+                color="secondary"
                 label="Entrar"
                 @click="clkEnter"
                 :loading="btnEnterLoading"
@@ -107,9 +107,9 @@
                   val => this.checkEqualPassword(val) || 'Senhas diferentes'
                 ]"
               />
-              <q-btn color="primary" label="Voltar" flat @click="clkBack" />
+              <q-btn color="secondary" label="Voltar" flat @click="clkBack" />
               <q-btn
-                color="primary"
+                color="secondary"
                 label="Cadastrar"
                 @click="registerNewPassword"
                 :loading="btnEnterLoading"
@@ -133,7 +133,7 @@
                 autofocus
               ></InputEmail>
               <q-btn
-                color="primary"
+                color="secondary"
                 label="Voltar"
                 flat
                 @click="loginStep = 'login'"
@@ -142,7 +142,7 @@
                 no-caps
               />
               <q-btn
-                color="primary"
+                color="secondary"
                 label="Próximo"
                 @click="btnCheckEmail"
                 :loading="btncheckEmailLoading"
@@ -155,8 +155,8 @@
       </div>
     </div>
     <q-footer flat class="bg-transparent text-primary q-pa-md">
-      <div>Versão 1.0</div>
-      <div>Build 1.2</div>
+      <div>Versão 0.1.1</div>
+      <div>Build 1.0</div>
     </q-footer>
   </q-layout>
 </template>

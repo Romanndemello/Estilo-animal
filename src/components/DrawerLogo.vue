@@ -1,6 +1,6 @@
 <template>
   <div class="text-center q-pa-md">
-    <q-img src='../assets/eanimal.png' width="70%"></q-img>
+    <q-img src='../assets/eanimalLogo.png' width="70%"></q-img>
   </div>
 </template>
 
