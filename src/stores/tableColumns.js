@@ -32,10 +32,10 @@ export const useTableColumns = defineStore("tableColumns", {
         sortable: false,
       },
       {
-        name: "petDate",
+        name: "petSize",
         align: "left",
-        label: "Data de criação",
-        field: "petDate",
+        label: "Porte",
+        field: "petSize",
         sortable: false,
       }
     ],
